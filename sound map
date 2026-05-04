@@ -1,0 +1,156 @@
+<script>
+const governoratesData = {
+  alexandria: {
+    name_en: "Alexandria",
+    name_ar: "الإسكندرية",
+    description: "مدينة ساحلية مرتبطة بأغاني البحر والحنين.",
+    songs: [
+      {
+        title: "إسكندرية بحري",
+        artist: "محمد منير",
+        year: "1989",
+        url: "https://www.youtube.com/embed/0q6yphdZhUA"
+      },
+      {
+        title: "يا إسكندرية",
+        artist: "سيد درويش",
+        year: "تراث",
+        url: "https://www.youtube.com/embed/1XqQ8vGZs1Y"
+      }
+    ]
+  },
+
+  cairo: {
+    name_en: "Cairo",
+    name_ar: "القاهرة",
+    description: "العاصمة وأغانيها الكلاسيك.",
+    songs: [
+      {
+        title: "في القاهرة",
+        artist: "كايروكي",
+        year: "2014",
+        url: "https://www.youtube.com/embed/6dC4dK1kq9w"
+      }
+    ]
+  },
+
+  aswan: {
+    name_en: "Aswan",
+    name_ar: "أسوان",
+    description: "موسيقى نوبية.",
+    songs: [
+      {
+        title: "أسوان",
+        artist: "محمد منير",
+        year: "1990s",
+        url: "https://www.youtube.com/embed/3vVxZ7Yz0kA"
+      }
+    ]
+  },
+
+  luxor: {
+    name_en: "Luxor",
+    name_ar: "الأقصر",
+    description: "تراث صعيدي.",
+    songs: [
+      {
+        title: "الأقصر بلدنا",
+        artist: "تراث",
+        year: "تراث",
+        url: "https://www.youtube.com/embed/8cK6Fh9wX8Q"
+      }
+    ]
+  },
+
+  portsaid: {
+    name_en: "Port Said",
+    name_ar: "بورسعيد",
+    description: "مدينة القناة.",
+    songs: [
+      {
+        title: "يا بورسعيد",
+        artist: "شادية",
+        year: "1960s",
+        url: "https://www.youtube.com/embed/3rKfWzV9ZyA"
+      }
+    ]
+  },
+
+  sinai: {
+    name_en: "Sinai",
+    name_ar: "سيناء",
+    description: "أغاني وطنية.",
+    songs: [
+      {
+        title: "سينا رجعت كاملة لينا",
+        artist: "مجموعة فنانين",
+        year: "1982",
+        url: "https://www.youtube.com/embed/d0gX6FQvW3E"
+      }
+    ]
+  }
+};
+
+
+// ربط المحافظات
+const govElements = document.querySelectorAll('.gov.featured');
+const panelContent = document.querySelector('.panel-content');
+const placeholder = document.querySelector('.panel-placeholder');
+const playerBar = document.querySelector('.player-bar');
+
+govElements.forEach(gov => {
+  gov.addEventListener('click', () => {
+    const govKey = gov.getAttribute('data-gov');
+    const data = governoratesData[govKey];
+    if (!data) return;
+
+    govElements.forEach(g => g.classList.remove('active'));
+    gov.classList.add('active');
+
+    placeholder.style.display = "none";
+    panelContent.classList.add('visible');
+
+    panelContent.innerHTML = `
+      <div class="gov-header">
+        <div class="gov-name-en">${data.name_en}</div>
+        <div class="gov-name-ar">${data.name_ar}</div>
+        <div class="gov-desc">${data.description}</div>
+      </div>
+
+      <div class="section-label">Songs</div>
+
+      ${data.songs.map(song => `
+        <div class="song-card">
+          <div class="play-btn">▶</div>
+          <div class="song-info">
+            <div class="song-title">${song.title}</div>
+            <div class="song-artist">${song.artist}</div>
+          </div>
+          <div class="song-year">${song.year}</div>
+        </div>
+      `).join("")}
+    `;
+
+    playSong(data.songs[0]);
+
+    document.querySelectorAll('.song-card').forEach((card, i) => {
+      card.addEventListener('click', () => {
+        playSong(data.songs[i]);
+      });
+    });
+  });
+});
+
+
+function playSong(song) {
+  playerBar.innerHTML = `
+    <iframe width="100%" height="180"
+      src="${song.url}?autoplay=1"
+      frameborder="0"
+      allow="autoplay"
+      allowfullscreen>
+    </iframe>
+  `;
+  playerBar.classList.add('visible');
+}
+</script>
